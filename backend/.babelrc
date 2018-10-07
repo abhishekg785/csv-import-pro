@@ -1,0 +1,10 @@
+{
+  "presets": [
+    "@babel/preset-flow"
+  ],
+  "plugins": [
+    ["@babel/proposal-class-properties", { "loose": true }],
+    "@babel/syntax-object-rest-spread",
+    ["@babel/transform-modules-commonjs", { "loose": true }]
+  ]
+}
