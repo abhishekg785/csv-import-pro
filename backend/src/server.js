@@ -19,6 +19,7 @@ function server() {
 
   app.use(bodyParser({ enableTypes: ['json'] }))
 
+  app.use(middlewares.swagger())
   app.use(routes.routes())
 
   // use it to send the app error to sentry etc

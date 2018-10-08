@@ -1,0 +1,17 @@
+swagger: "2.0"
+info:
+  title: CSV Importer
+  version: __VERSION__
+  contact:
+    name: Abhishek Goswami
+    email: abhishekg785@gmail.com
+
+paths:
+  /healthcheck:
+    get:
+      summary: API Healthcheck
+      responses:
+        204:
+          description: API is healthy
+        default:
+          description: API is not healthy
