@@ -1,5 +1,4 @@
 import Router from 'koa-router'
-import httpStatusCodes from 'http-status-codes'
 
 import api from './api'
 

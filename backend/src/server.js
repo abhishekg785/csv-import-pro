@@ -17,7 +17,7 @@ function server() {
     await next()
   })
 
-  app.use(bodyParser({ enableTypes: ['json'] }))
+  app.use(bodyParser())
 
   app.use(middlewares.swagger())
   app.use(routes.routes())
@@ -33,7 +33,7 @@ function server() {
     console.log('start csv-import service at port', config.ports.http)
   })
 
-  appServer.setTimeout(config.setTimeout)
+  appServer.setTimeout(config.appTimeout)
 }
 
 export default server
