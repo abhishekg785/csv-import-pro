@@ -54,6 +54,7 @@ const getFile = async () => {
   const readDir = promisify(fs.readdir)
 
   const file = await readDir(fileUploadDirPath)
+  console.log(fileUploadDirPath)
   if (file.length === 0 || file.length > 1) {
     throw new Error('0 or more than 1 file available for the given operation!')
   }
@@ -109,7 +110,11 @@ const csv = {
 
       const result = await parseCsv(path.resolve(fileUploadDirPath, file), query)
 
-      ctx.body = result
+      ctx.status = 200
+      ctx.body = {
+        success: 1,
+        result,
+      }
     } catch (error) {
       // do nothing
       ctx.body = {

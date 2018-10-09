@@ -15,3 +15,19 @@ paths:
           description: API is healthy
         default:
           description: API is not healthy
+  /search:
+    post:
+      summary: Search for the data in the csv
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              query:
+                type: string
+                required: true
+      responses:
+        201:
+          description: Result
