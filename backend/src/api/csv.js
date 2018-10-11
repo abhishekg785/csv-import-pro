@@ -3,13 +3,16 @@
 import fs from 'fs'
 import path from 'path'
 import { promisify } from 'util'
+import { Transform } from 'stream'
 
 import type { Context, Request } from 'koa'
 import multer from 'koa-multer'
 import cleandir from 'clean-dir'
 import csvStreamify from 'csv-streamify'
 
-import { SUPPORTED_MIME_TYPES } from '../constants'
+import {
+  SUPPORTED_MIME_TYPES,
+} from '../constants'
 
 type $Context = {
   ...Context,
@@ -41,7 +44,7 @@ const upload = multer({
   },
 });
 
-
+// clears the dir on the given path
 const clearUploadsDir = dirPath => new Promise((resolve, reject) => {
   cleandir(dirPath, (error) => {
     if (error) return reject(error)
@@ -54,7 +57,7 @@ const getFile = async () => {
   const readDir = promisify(fs.readdir)
 
   const file = await readDir(fileUploadDirPath)
-  console.log(fileUploadDirPath)
+
   if (file.length === 0 || file.length > 1) {
     throw new Error('0 or more than 1 file available for the given operation!')
   }
@@ -62,20 +65,45 @@ const getFile = async () => {
   return file[0]
 }
 
-const parseCsv = (csvFilePath, query) => new Promise((resolve, reject) => {
-  const results = []
-  const parser = csvStreamify()
+const getQueryFilter = (query) => {
+  const filter = new Transform({ objectMode: true })
 
-  parser.on('data', (line) => {
-    if (line.includes(query)) {
-      results.push(line)
+  // eslint-disable-next-line no-underscore-dangle
+  filter._transform = function t(data, encoding, done) {
+    if (data.includes(query)) {
+      const [id, name, age, address, team] = data
+      this.push({
+        id,
+        name,
+        age,
+        address,
+        team,
+      })
     }
-  })
 
-  const rs = fs.createReadStream(csvFilePath).pipe(parser)
-  rs.on('end', () => {
-    resolve(results);
-  })
+    done()
+  }
+
+  return filter
+}
+
+const parseCsv = (csvFilePath, query) => new Promise((resolve, reject) => {
+  const result = []
+  const csvToJson = csvStreamify()
+
+  const filter = getQueryFilter(query)
+
+  fs.createReadStream(csvFilePath)
+    .on('error', e => reject(e))
+    .pipe(csvToJson)
+    .pipe(filter)
+    .on('data', (d) => {
+      result.push(d)
+    })
+    .on('end', () => {
+      resolve(result)
+    })
+    .on('error', error => reject(error))
 })
 
 const csv = {
@@ -87,7 +115,7 @@ const csv = {
     // clear the uploads dir
     await clearUploadsDir(fileUploadDirPath)
 
-    // uploads the new file
+    // upload the new file
     const singleFileUpload = upload.single('file');
     singleFileUpload(ctx)
 
@@ -101,7 +129,7 @@ const csv = {
 
       if (!query) {
         ctx.status = 400
-        ctx.body = 'No query found'
+        ctx.body = 'Query is required.'
 
         return
       }
@@ -112,13 +140,12 @@ const csv = {
 
       ctx.status = 200
       ctx.body = {
-        success: 1,
+        success: true,
         result,
       }
     } catch (error) {
-      // do nothing
       ctx.body = {
-        error: 1,
+        error: true,
         message: error.message,
       }
     }

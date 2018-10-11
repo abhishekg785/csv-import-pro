@@ -13,10 +13,6 @@
     "lint:ci": "eslint src --output-file build/result-lint.xml --format checkstyle",
     "flow": "flow check"
   },
-  "engines": {
-    "node": ">=10"
-  },
-  "engineStrict": true,
   "author": "abhishekg785",
   "dependencies": {
     "clean-dir": "^1.0.3",
