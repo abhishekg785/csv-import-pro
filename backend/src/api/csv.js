@@ -12,6 +12,7 @@ import csvStreamify from 'csv-streamify'
 
 import {
   SUPPORTED_MIME_TYPES,
+  CSV_STRUCTURE_FIELDS,
 } from '../constants'
 
 type $Context = {
@@ -65,20 +66,48 @@ const getFile = async () => {
   return file[0]
 }
 
+const getFormattedData = (data: Array<mixed>) => {
+  const [
+    id,
+    name,
+    age,
+    address,
+    team,
+  ] = data
+
+  return {
+    id,
+    name,
+    age,
+    address,
+    team,
+  }
+}
+
 const getQueryFilter = (query) => {
+  const queryFilter = new Transform({ objectMode: true })
+
+  // eslint-disable-next-line no-underscore-dangle
+  queryFilter._transform = function t(data, encoding, done) {
+    if (data.includes(query)) {
+      this.push(getFormattedData(data))
+    }
+
+    done()
+  }
+
+  return queryFilter
+}
+
+// filter for the name field in the data
+const filterOnkey = (key, query) => {
   const filter = new Transform({ objectMode: true })
 
   // eslint-disable-next-line no-underscore-dangle
   filter._transform = function t(data, encoding, done) {
-    if (data.includes(query)) {
-      const [id, name, age, address, team] = data
-      this.push({
-        id,
-        name,
-        age,
-        address,
-        team,
-      })
+    const d = data[key] || null
+    if (d && d.match(new RegExp(query))) {
+      this.push(getFormattedData(data))
     }
 
     done()
@@ -87,22 +116,16 @@ const getQueryFilter = (query) => {
   return filter
 }
 
-const parseCsv = (csvFilePath, query) => new Promise((resolve, reject) => {
+const parseCsv = (csvFilePath, filter) => new Promise((resolve, reject) => {
   const result = []
   const csvToJson = csvStreamify()
 
-  const filter = getQueryFilter(query)
-
-  fs.createReadStream(csvFilePath)
+  const readStream = fs.createReadStream(csvFilePath)
     .on('error', e => reject(e))
     .pipe(csvToJson)
     .pipe(filter)
-    .on('data', (d) => {
-      result.push(d)
-    })
-    .on('end', () => {
-      resolve(result)
-    })
+    .on('data', d => result.push(d))
+    .on('end', () => { resolve(result) })
     .on('error', error => reject(error))
 })
 
@@ -112,10 +135,8 @@ const csv = {
   },
 
   import: async (ctx: $Context) => {
-    // clear the uploads dir
     await clearUploadsDir(fileUploadDirPath)
 
-    // upload the new file
     const singleFileUpload = upload.single('file');
     singleFileUpload(ctx)
 
@@ -134,9 +155,11 @@ const csv = {
         return
       }
 
-      const file = await getFile()
+      const queryFilter = getQueryFilter(query)
 
-      const result = await parseCsv(path.resolve(fileUploadDirPath, file), query)
+      const fileName = await getFile()
+
+      const result = await parseCsv(path.resolve(fileUploadDirPath, fileName), queryFilter)
 
       ctx.status = 200
       ctx.body = {
@@ -150,6 +173,35 @@ const csv = {
       }
     }
   },
+
+  autocomplete: async (ctx: $Context) => {
+    try {
+      const { query, limit, field } = ctx.query
+
+      const key = CSV_STRUCTURE_FIELDS.indexOf(field.toLowerCase())
+      if (key === -1) {
+        throw new Error(`No such field ${field} exists in the csv file.`)
+      }
+
+      const filter = filterOnkey(key, query)
+
+      const fileName = await getFile()
+
+      const result = await parseCsv(path.resolve(fileUploadDirPath, fileName), filter)
+      const limitResult = result.slice(0, limit)
+
+      ctx.status = 200
+      ctx.body = {
+        success: true,
+        result: limitResult,
+      }
+    } catch (error) {
+      ctx.body = {
+        error: true,
+        message: error.message,
+      }
+    }
+  }
 }
 
 export default csv

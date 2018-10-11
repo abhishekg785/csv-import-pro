@@ -10,5 +10,6 @@ router.get('/healthcheck', api.healthcheck.check)
 router.get('/', api.csv.displayPage)
 router.post('/import', api.csv.import)
 router.post('/search', api.csv.search)
+router.get('/autocomplete', api.csv.autocomplete)
 
 export default router

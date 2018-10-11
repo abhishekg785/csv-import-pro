@@ -31,3 +31,25 @@ paths:
       responses:
         201:
           description: Result
+  /autocomplete:
+    get:
+      summary: Gets the suggestions on the basis of the given query param
+      parameters:
+        - in : query
+          name: query
+          schema:
+            type: integer
+          description: The value to search for in the data
+        - in : query
+          name: field
+          schema:
+            type: string
+          description: The field value to search for in the data such as name, age etc
+        - in : query
+          name: limit
+          schema:
+            type: integer
+          description: The number of values to fetch
+      responses:
+        201:
+          description: Result
