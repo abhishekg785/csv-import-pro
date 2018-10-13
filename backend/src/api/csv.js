@@ -4,11 +4,14 @@ import fs from 'fs'
 import path from 'path'
 import { promisify } from 'util'
 import { Transform } from 'stream'
+import joi from 'joi'
 
 import type { Context, Request } from 'koa'
 import multer from 'koa-multer'
 import cleandir from 'clean-dir'
 import csvStreamify from 'csv-streamify'
+
+import validateSchema from '../validation'
 
 import {
   SUPPORTED_MIME_TYPES,
@@ -146,14 +149,10 @@ const csv = {
   search: async (ctx: $Context) => {
     try {
       const { body } = ctx.request
+
+      await validateSchema(body, 'search')
+
       const { query } = body
-
-      if (!query) {
-        ctx.status = 400
-        ctx.body = 'Query is required.'
-
-        return
-      }
 
       const queryFilter = getQueryFilter(query)
 
@@ -177,6 +176,8 @@ const csv = {
   autocomplete: async (ctx: $Context) => {
     try {
       const { query, limit, field } = ctx.query
+
+      await validateSchema(ctx.query, 'autoComplete')
 
       const key = CSV_STRUCTURE_FIELDS.indexOf(field.toLowerCase())
       if (key === -1) {
