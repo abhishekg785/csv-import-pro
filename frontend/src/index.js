@@ -2,8 +2,17 @@ import '@babel/polyfill'
 import React from 'react'
 import { render } from 'react-dom'
 
-const App = () => {
-  return (<div>hello</div>)
-}
+import App from './components/App'
 
-render(<App/>, document.getElementById('root'))
+const renderApp = Component => render(
+  <Component />,
+  document.getElementById('root'),
+);
+
+renderApp(App)
+
+if (__DEV__ && module.hot) {
+  module.hot.accept('./components/App', () => {
+    renderApp(App)
+  })
+}

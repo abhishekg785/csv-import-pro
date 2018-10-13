@@ -30,6 +30,11 @@ module.exports = (env) => {
         },
       ],
     },
+    resolve: {
+      alias: {
+        '@material-ui/core': path.resolve(__dirname, 'node_modules/@material-ui/core/es'),
+      },
+    },
     devtool: isDev ? 'eval-source-map' : 'source-map',
     devServer: {
       noInfo: true,
