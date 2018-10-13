@@ -120,7 +120,7 @@ const parseCsv = (csvFilePath, filter) => new Promise((resolve, reject) => {
   const result = []
   const csvToJson = csvStreamify()
 
-  const readStream = fs.createReadStream(csvFilePath)
+  fs.createReadStream(csvFilePath)
     .on('error', e => reject(e))
     .pipe(csvToJson)
     .pipe(filter)
@@ -201,7 +201,7 @@ const csv = {
         message: error.message,
       }
     }
-  }
+  },
 }
 
 export default csv
