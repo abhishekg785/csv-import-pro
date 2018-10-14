@@ -12,7 +12,7 @@ import Highlighter from "react-highlight-words";
 
 type suggestion = {
   id: number,
-  name: String,
+  name: string,
 }
 
 type Props = {
@@ -49,7 +49,7 @@ function SearchSuggestion({ query, suggestions, selectSuggestion, classes }: Pro
                   highlightClassName="highlight"
                   searchWords={[query]}
                   autoEscape
-                  textToHighlight={d.name}
+                  textToHighlight={`${d.name} ( ${d.id} )`}
                 />
               </TableCell>
             </TableRow>

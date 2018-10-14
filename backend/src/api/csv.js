@@ -4,7 +4,6 @@ import fs from 'fs'
 import path from 'path'
 import { promisify } from 'util'
 import { Transform } from 'stream'
-import joi from 'joi'
 
 import type { Context, Request } from 'koa'
 import multer from 'koa-multer'
@@ -109,7 +108,7 @@ const filterOnkey = (key, query) => {
   // eslint-disable-next-line no-underscore-dangle
   filter._transform = function t(data, encoding, done) {
     const d = data[key] || null
-    if (d && d.match(new RegExp(query))) {
+    if (d && d.match(new RegExp(query, 'i'))) {
       this.push(getFormattedData(data))
     }
 

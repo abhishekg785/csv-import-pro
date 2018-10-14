@@ -21,7 +21,7 @@ type DataType = {
 type State = {
   query?: string,
   searchResult: Array<DataType>,
-  suggestions: Array<any>,
+  suggestions: Array<DataType>,
   showSuggestions: boolean,
 }
 
