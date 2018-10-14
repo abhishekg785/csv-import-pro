@@ -2,6 +2,8 @@
 
 import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
+import serve from 'koa-static'
+import path from 'path'
 
 import config from './config'
 import routes from './routes'
@@ -18,6 +20,8 @@ function server() {
   })
 
   app.use(bodyParser())
+
+  app.use(serve(path.resolve(__dirname, '../../frontend/dist')))
 
   app.use(middlewares.swagger())
   app.use(routes.routes())

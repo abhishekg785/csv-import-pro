@@ -133,17 +133,17 @@ const parseCsv = (csvFilePath, filter) => new Promise((resolve, reject) => {
 })
 
 const csv = {
-  displayPage: async (ctx: Context) => {
-    ctx.body = 'displayPage'
-  },
-
   import: async (ctx: $Context) => {
-    await clearUploadsDir(fileUploadDirPath)
+    try {
+      await clearUploadsDir(fileUploadDirPath)
 
-    const singleFileUpload = upload.single('file');
-    singleFileUpload(ctx)
+      const singleFileUpload = upload.single('file');
+      singleFileUpload(ctx)
 
-    ctx.status = 200
+      ctx.status = 200
+    } catch (error) {
+      ctx.status = 500
+    }
   },
 
   search: async (ctx: $Context) => {
@@ -166,6 +166,7 @@ const csv = {
         result,
       }
     } catch (error) {
+      ctx.status = 500
       ctx.body = {
         error: true,
         message: error.message,
