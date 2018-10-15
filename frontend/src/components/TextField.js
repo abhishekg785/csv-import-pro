@@ -6,9 +6,10 @@ import { TextField as MuiTextField } from '@material-ui/core'
 type Props = {
   value?: string,
   onChange: Function,
+  classes: any,
 }
 
-function TextField({ value, onChange }: Props) {
+function TextField({ value, classes, onChange }: Props) {
   return (
     <MuiTextField
       id="standard-search"
@@ -16,6 +17,7 @@ function TextField({ value, onChange }: Props) {
       type="Search"
       value={value}
       onChange={onChange}
+      className={classes}
     />
   )
 }

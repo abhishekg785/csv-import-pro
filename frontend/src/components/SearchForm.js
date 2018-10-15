@@ -2,13 +2,15 @@
 
 import React, { Component, Fragment } from 'react'
 import _ from 'lodash'
+import { withStyles } from '@material-ui/core/styles';
 
 import { search, fetchSuggestions } from '../actions/searchAction'
 
 import TextField from './TextField'
 import Button from './Button'
 import SearchResult from './SearchResult'
-import SearchSuggestion from './SearchSuggestion'
+import Suggestion from './Suggestion'
+import LinerLoader from './LinearLoader'
 
 type DataType = {
   id?: number,
@@ -23,23 +25,48 @@ type State = {
   searchResult: Array<DataType>,
   suggestions: Array<DataType>,
   showSuggestions: boolean,
+  isLoading: boolean,
 }
 
-class SearchForm extends Component<null, State> {
+type Props = {
+  classes: any,
+}
+
+const styles = theme => ({
+  root: {
+    position: 'absolute',
+    marginTop: '2%',
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 250,
+  },
+  button: {
+    marginTop: '2%',
+    marginLeft: '2%',
+  },
+});
+
+class SearchForm extends Component<Props, State> {
   state = {
     query: '',
     searchResult: [],
     suggestions: [],
-    showSuggestions: true,
+    showSuggestions: false,
+    isLoading: false,
   }
 
   debouncedAutoCompleteSearch = _.debounce(query => this.autoCompleteSearch(query), 500)
 
   fetchData = (query: string) => {
+    this.setState({ isLoading: true })
+
     fetchSuggestions(query)
       .then(suggestions => this.setState({
         suggestions,
         showSuggestions: true,
+        isLoading: false,
       }))
   }
 
@@ -58,9 +85,12 @@ class SearchForm extends Component<null, State> {
 
   handleSearch = () => {
     const { query } = this.state
+    this.setState({ isLoading: true })
+
     search(query).then(data => this.setState({
       searchResult: data,
       showSuggestions: false,
+      isLoading: false,
     }))
   }
 
@@ -77,31 +107,41 @@ class SearchForm extends Component<null, State> {
       searchResult,
       suggestions,
       showSuggestions,
+      isLoading,
     } = this.state
+
+    const { classes } = this.props
 
     return (
       <Fragment>
-        <TextField
-          onChange={this.handleTextChange}
-          value={query}
-        />
-        <Button
-          active
-          onClick={this.handleSearch}
-        >
-          Search
-        </Button>
-        <SearchResult result={searchResult} />
-        { showSuggestions ? (
-          <SearchSuggestion
-            query={query}
-            suggestions={suggestions}
-            selectSuggestion={this.selectSuggestion}
+        <LinerLoader isLoading={isLoading} />
+        <div className={classes.root}>
+          <TextField
+            onChange={this.handleTextChange}
+            value={query}
+            classes={classes.textField}
           />
-        ) : null}
+          <br />
+          <Button
+            active
+            onClick={this.handleSearch}
+            disabled={!query}
+            classes={classes.button}
+          >
+            Search
+          </Button>
+          { showSuggestions && (
+            <Suggestion
+              query={query}
+              suggestions={suggestions}
+              selectSuggestion={this.selectSuggestion}
+            />
+          )}
+          <SearchResult result={searchResult} />
+        </div>
       </Fragment>
     )
   }
 }
 
-export default SearchForm
+export default withStyles(styles)(SearchForm)

@@ -1,6 +1,7 @@
 import React from 'react'
 
-import { Modal as MuiModel, Typography, withStyles } from '@material-ui/core'
+import { Modal as MuiModel, Typography } from '@material-ui/core'
+import { withStyles } from '@material-ui/core/styles';
 
 type Props = {
   title?: string,
@@ -14,7 +15,7 @@ const styles = theme => ({
   paper: {
     position: 'absolute',
     left: '25%',
-    top: '15%',
+    top: '20%',
     width: theme.spacing.unit * 50,
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],

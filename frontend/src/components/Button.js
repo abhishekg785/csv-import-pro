@@ -9,6 +9,7 @@ type Props = {
   disabled?: boolean,
   children: any,
   onClick: Function,
+  classes?: any,
 }
 
 function Button({
@@ -16,6 +17,7 @@ function Button({
   disabled,
   children,
   onClick,
+  classes,
 }: Props) {
   return (
     <MuiButton
@@ -23,6 +25,7 @@ function Button({
       color={active ? 'primary' : 'default'}
       onClick={onClick}
       disabled={disabled}
+      className={classes}
     >
       {children}
     </MuiButton>
@@ -31,6 +34,7 @@ function Button({
 
 Button.defaultProps = {
   disabled: false,
+  classes: undefined,
 }
 
 export default Button

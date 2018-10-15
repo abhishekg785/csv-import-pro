@@ -1,13 +1,16 @@
 // @flow
 
 import React, { Component, Fragment } from 'react'
-
 import Dropzone from 'react-dropzone'
-import { Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import { Typography, Divider } from '@material-ui/core';
+import { Link } from 'react-router-dom'
 
 import Button from './Button'
 import ModelDialog from './ModelDialog'
-import Loader from './Loader'
+import LinearLoader from './LinearLoader'
+
+import FileDropzone from './FileDropzone'
 
 import uploadFile from '../actions/fileAction'
 
@@ -24,7 +27,29 @@ type State = {
   uploadingFileName: string,
 }
 
-class FileUpload extends Component<null, State> {
+type Props = {
+  classes: any,
+}
+
+const styles = theme => ({
+  button: {
+    position: 'absolute',
+    top: '40%',
+    left: '42%',
+  },
+  importButton: {
+    marginTop: '5px',
+    width: '100px',
+  },
+  failText: {
+    color: '#ff3d00',
+  },
+  successText: {
+    color: '#8bc34a',
+  },
+});
+
+class FileUpload extends Component<Props, State> {
   state = {
     uploadingFile: {},
     isModalOpen: false,
@@ -95,27 +120,26 @@ class FileUpload extends Component<null, State> {
       uploadingFileName,
     } = this.state
 
+    const { classes } = this.props
+
     const isSubmitButtonDisabled: boolean = isLoading || !uploadingFileName
     const isSubmitButtonActive: boolean = !isLoading && uploadingFileName !== ''
 
     const fileDropContent = (
-      <Fragment>
-        <Dropzone
-          onDrop={this.handleFileDrop}
-          multiple={false}
-          accept="text/csv"
-        >
-          <p>Drop your csv file here or click to upload</p>
-        </Dropzone>
-        <Typography>{ uploadingFileName }</Typography>
+      <div>
+        <FileDropzone
+          handleFileDrop={this.handleFileDrop}
+          uploadingFileName={uploadingFileName}
+        />
         <Button
           active={isSubmitButtonActive}
           onClick={this.submitFile}
           disabled={isSubmitButtonDisabled}
+          classes={classes.importButton}
         >
-          Submit
+          Import
         </Button>
-      </Fragment>
+      </div>
     );
 
     return (
@@ -123,21 +147,29 @@ class FileUpload extends Component<null, State> {
         <Button
           active
           onClick={this.showModal}
+          classes={classes.button}
         >
-          Upload the csv
+          Import the csv
         </Button>
         <ModelDialog
-          title="CSV file upload"
+          title="CSV File Upload"
           isModalOpen={isModalOpen}
           closeModal={this.closeModal}
         >
           { fileDropContent }
-          <Loader isLoading={isLoading} />
-          { fileUploadStatus }
+          <LinearLoader isLoading={isLoading} />
+          <Typography
+            variant="body2"
+            gutterBottom
+            className={fileUploadStatus === 'fail' ? classes.failText : classes.successText}
+          >
+            { fileUploadStatus }
+            <Link to="/search">Search</Link>
+          </Typography>
         </ModelDialog>
       </Fragment>
     )
   }
 }
 
-export default FileUpload
+export default withStyles(styles)(FileUpload)

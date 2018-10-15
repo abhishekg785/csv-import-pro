@@ -19,7 +19,7 @@
     "lodash": "^4.17.11",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
-    "react-dropzone": "^6.2.0",
+    "react-dropzone": "4.2.3",
     "react-highlight-words": "^0.14.0",
     "react-redux": "^5.0.7",
     "react-redux-toastr": "^7.4.0",
