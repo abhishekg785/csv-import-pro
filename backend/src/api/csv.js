@@ -102,6 +102,8 @@ const getFormattedData = (data: Array<mixed>) => {
 // CSV FILE STREAM OPERATIONS HERE
 
 /**
+ * TRANSFORM STREAMS
+ *
  * Read the csv file as streams.
  * The data will be piped to the queryFilter
  * which will forward the data that matches the given query
@@ -124,6 +126,8 @@ const getQueryFilter = (query: string) => {
 }
 
 /**
+ * TRANSFORM STREAMS
+ *
  * Read the csv file as streams.
  * The data will be piped to the filter
  * The filter passes the data that matches the given

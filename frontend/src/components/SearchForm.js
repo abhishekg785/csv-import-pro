@@ -57,6 +57,7 @@ class SearchForm extends Component<Props, State> {
     isLoading: false,
   }
 
+  // debounce the autocomplete search request
   debouncedAutoCompleteSearch = _.debounce(query => this.autoCompleteSearch(query), 500)
 
   fetchData = (query: string) => {
@@ -74,6 +75,8 @@ class SearchForm extends Component<Props, State> {
     this.fetchData(query)
   }
 
+  // We will debounce the text change, so that we are
+  // not sending the request each time the text changes
   handleTextChange = (e: any) => {
     this.setState({
       query: e.target.value,
