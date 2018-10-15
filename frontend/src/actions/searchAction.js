@@ -21,36 +21,6 @@ export const fetchSuggestions = async (query: string) => {
     const result = _.get(response, 'data.result') || []
 
     return result
-    // return [
-    //   {
-    //     id: 12,
-    //     name: 'abhishek',
-    //     age: 21,
-    //     team: 'blue',
-    //     address: 'hiro house',
-    //   },
-    //   {
-    //     id: 13,
-    //     name: 'sushma',
-    //     age: 21,
-    //     team: 'blue',
-    //     address: 'hiro house',
-    //   },
-    //   {
-    //     id: 14,
-    //     name: 'pooja',
-    //     age: 21,
-    //     team: 'blue',
-    //     address: 'hiro house',
-    //   },
-    //   {
-    //     id: 15,
-    //     name: 'dinesh',
-    //     age: 21,
-    //     team: 'blue',
-    //     address: 'hiro house',
-    //   },
-    // ]
   } catch (error) {
     // eslint-disable-next-line no-console
     console.log(error)
@@ -66,36 +36,6 @@ export const search = async (query: string) => {
     const result = _.get(response, 'data.result') || []
 
     return result
-    // return [
-    //   {
-    //     id: 12,
-    //     name: 'abhishek',
-    //     age: 21,
-    //     team: 'blue',
-    //     address: 'hiro house',
-    //   },
-    //   {
-    //     id: 13,
-    //     name: 'sushma',
-    //     age: 21,
-    //     team: 'blue',
-    //     address: 'hiro house',
-    //   },
-    //   {
-    //     id: 14,
-    //     name: 'pooja',
-    //     age: 21,
-    //     team: 'blue',
-    //     address: 'hiro house',
-    //   },
-    //   {
-    //     id: 15,
-    //     name: 'dinesh',
-    //     age: 21,
-    //     team: 'blue',
-    //     address: 'hiro house',
-    //   },
-    // ]
   } catch (error) {
     // eslint-disable-next-line no-console
     console.log(error)

@@ -3,7 +3,7 @@
 import React, { Component, Fragment } from 'react'
 import Dropzone from 'react-dropzone'
 import { withStyles } from '@material-ui/core/styles';
-import { Typography, Divider } from '@material-ui/core';
+import { Typography, Button as MuiButton } from '@material-ui/core';
 import { Link } from 'react-router-dom'
 
 import Button from './Button'
@@ -46,6 +46,11 @@ const styles = theme => ({
   },
   successText: {
     color: '#8bc34a',
+  },
+  searchButton: {
+    position: 'absolute',
+    top: '48%',
+    left: '38%',
   },
 });
 
@@ -151,6 +156,13 @@ class FileUpload extends Component<Props, State> {
         >
           Import the csv
         </Button>
+        <MuiButton
+          className={classes.searchButton}
+          variant="outlined"
+          href="#search"
+        >
+          Search Operation on CSV
+        </MuiButton>
         <ModelDialog
           title="CSV File Upload"
           isModalOpen={isModalOpen}

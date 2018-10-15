@@ -12,6 +12,8 @@ import csvStreamify from 'csv-streamify'
 
 import validateSchema from '../validation'
 
+import dumbCache from '../utils/dataService'
+
 import {
   SUPPORTED_MIME_TYPES,
   CSV_STRUCTURE_FIELDS,
@@ -25,8 +27,10 @@ type $Context = {
   },
 }
 
+// the path of the upload dir where the file is being uploaded
 const fileUploadDirPath = path.resolve(__dirname, '..', 'uploads')
 
+// Configure file storage and name
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, fileUploadDirPath)
@@ -36,18 +40,20 @@ const storage = multer.diskStorage({
   },
 })
 
+// use multer to upload the file
 const upload = multer({
   storage,
   fileFilter: (req, file, cb) => {
     const { mimetype } = file
 
+    // check for the given MIME type, i.e text/csv in this case
     if (!SUPPORTED_MIME_TYPES.includes(mimetype)) return cb(null, false)
 
     return cb(null, true)
   },
 });
 
-// clears the dir on the given path
+// utility function to clean the dir on the given path
 const clearUploadsDir = dirPath => new Promise((resolve, reject) => {
   cleandir(dirPath, (error) => {
     if (error) return reject(error)
@@ -56,18 +62,25 @@ const clearUploadsDir = dirPath => new Promise((resolve, reject) => {
   })
 })
 
+// Returns the name of the imported file
 const getFile = async () => {
+  // promisify the readdir operation of fs module
   const readDir = promisify(fs.readdir)
 
-  const file = await readDir(fileUploadDirPath)
+  const files = await readDir(fileUploadDirPath)
 
-  if (file.length === 0 || file.length > 1) {
-    throw new Error('0 or more than 1 file available for the given operation!')
+  // ignore the notes file
+  if (files.includes('notes')) files.splice(files.indexOf('notes'), 1)
+
+  // check that only single imported file is present
+  if (files.length === 0 || files.length > 1) {
+    throw new Error('0 or more than 1 csv file available for the given operation!')
   }
 
-  return file[0]
+  return files[0]
 }
 
+// Formats the data on the basis of the given csv file structure
 const getFormattedData = (data: Array<mixed>) => {
   const [
     id,
@@ -86,7 +99,16 @@ const getFormattedData = (data: Array<mixed>) => {
   }
 }
 
-const getQueryFilter = (query) => {
+// CSV FILE STREAM OPERATIONS HERE
+
+/**
+ * Read the csv file as streams.
+ * The data will be piped to the queryFilter
+ * which will forward the data that matches the given query
+ *
+ * @param query : The data to be matched in the csv file
+ */
+const getQueryFilter = (query: string) => {
   const queryFilter = new Transform({ objectMode: true })
 
   // eslint-disable-next-line no-underscore-dangle
@@ -101,8 +123,19 @@ const getQueryFilter = (query) => {
   return queryFilter
 }
 
-// filter for the name field in the data
-const filterOnkey = (key, query) => {
+/**
+ * Read the csv file as streams.
+ * The data will be piped to the filter
+ * The filter passes the data that matches the given
+ * key and query.
+ *
+ * for eg: if the key is 'NAME' and query is 'Hiro'
+ * it will pass only the names in the data that contains 'Hiro'
+ *
+ * @param key : The part of the data needed to be queried eg: NAME, AGE, ADDRESS
+ * @param query : The data to be matched in the csv file
+ */
+const filterOnkey = (key: string, query: string) => {
   const filter = new Transform({ objectMode: true })
 
   // eslint-disable-next-line no-underscore-dangle
@@ -118,7 +151,17 @@ const filterOnkey = (key, query) => {
   return filter
 }
 
-const parseCsv = (csvFilePath, filter) => new Promise((resolve, reject) => {
+/**
+ * STREAMS ARE AWESOME!
+ * Create the file read stream, instead of reading the
+ * whole file at once.
+ * Parse the data and convert it into json format.
+ * Pipe the data to the filters to get the desired output
+ *
+ * @param csvFilePath: The path of the imported csv file
+ * @param filter: The function to read the file stream data and filter
+ */
+const parseCsv = (csvFilePath: string, filter) => new Promise((resolve, reject) => {
   const result = []
   const csvToJson = csvStreamify()
 
@@ -131,7 +174,9 @@ const parseCsv = (csvFilePath, filter) => new Promise((resolve, reject) => {
     .on('error', error => reject(error))
 })
 
+// CSV Operations
 const csv = {
+  // Upload the file
   import: async (ctx: $Context) => {
     try {
       await clearUploadsDir(fileUploadDirPath)
@@ -145,19 +190,32 @@ const csv = {
     }
   },
 
+  // handles the search operation and responds with the found results
   search: async (ctx: $Context) => {
     try {
       const { body } = ctx.request
 
+      // validate user input
       await validateSchema(body, 'search')
 
       const { query } = body
 
-      const queryFilter = getQueryFilter(query)
+      let result
+      // check for the data in the cache
+      const cachedData = dumbCache.getCache(query)
+      if (cachedData) {
+        result = cachedData
+      } else {
+        // filter to pipe the file stream through it
+        const queryFilter = getQueryFilter(query)
 
-      const fileName = await getFile()
+        const fileName = await getFile()
 
-      const result = await parseCsv(path.resolve(fileUploadDirPath, fileName), queryFilter)
+        result = await parseCsv(path.resolve(fileUploadDirPath, fileName), queryFilter)
+
+        // set the result in the cache to be servred from cache next time
+        if (result) dumbCache.setCache(query, result)
+      }
 
       ctx.status = 200
       ctx.body = {
@@ -173,10 +231,12 @@ const csv = {
     }
   },
 
+  // handles autocomplete and respond with the suggestions
   autocomplete: async (ctx: $Context) => {
     try {
       const { query, limit, field } = ctx.query
 
+      // validate the user data
       await validateSchema(ctx.query, 'autoComplete')
 
       const key = CSV_STRUCTURE_FIELDS.indexOf(field.toLowerCase())
@@ -184,6 +244,7 @@ const csv = {
         throw new Error(`No such field ${field} exists in the csv file.`)
       }
 
+      // filter to pipe the file streams through it
       const filter = filterOnkey(key, query)
 
       const fileName = await getFile()

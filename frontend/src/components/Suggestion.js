@@ -27,6 +27,8 @@ const styles = theme => ({
     maxWidth: '360px',
     backgroundColor: theme.palette.background.paper,
     position: 'fixed',
+    maxHeight: '100%',
+    overflow: 'auto',
   },
 });
 

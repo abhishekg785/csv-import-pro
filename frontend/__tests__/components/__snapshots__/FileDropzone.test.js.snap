@@ -1,0 +1,273 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FileDropzone renders correctly 1`] = `
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <FileDropzone
+    uploadingFileName=""
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "children": Array [
+        <Dropzone
+          accept="text/csv"
+          disableClick={false}
+          disablePreview={false}
+          disabled={false}
+          maxSize={Infinity}
+          minSize={0}
+          multiple={false}
+          preventDropOnDocument={true}
+        >
+          <WithStyles(Typography)
+            align="center"
+            gutterBottom={true}
+            variant="subheading"
+          >
+            Drop your csv file here or Click to upload
+          </WithStyles(Typography)>
+          <WithStyles(Typography)
+            align="center"
+            gutterBottom={true}
+          >
+            Only .csv files will be accepted.
+          </WithStyles(Typography)>
+        </Dropzone>,
+        <WithStyles(Typography)
+          gutterBottom={true}
+          variant="subheading"
+        >
+          
+        </WithStyles(Typography)>,
+      ],
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "accept": "text/csv",
+          "children": Array [
+            <WithStyles(Typography)
+              align="center"
+              gutterBottom={true}
+              variant="subheading"
+            >
+              Drop your csv file here or Click to upload
+            </WithStyles(Typography)>,
+            <WithStyles(Typography)
+              align="center"
+              gutterBottom={true}
+            >
+              Only .csv files will be accepted.
+            </WithStyles(Typography)>,
+          ],
+          "disableClick": false,
+          "disablePreview": false,
+          "disabled": false,
+          "maxSize": Infinity,
+          "minSize": 0,
+          "multiple": false,
+          "onDrop": undefined,
+          "preventDropOnDocument": true,
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "align": "center",
+              "children": "Drop your csv file here or Click to upload",
+              "gutterBottom": true,
+              "variant": "subheading",
+            },
+            "ref": null,
+            "rendered": "Drop your csv file here or Click to upload",
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "align": "center",
+              "children": "Only .csv files will be accepted.",
+              "gutterBottom": true,
+            },
+            "ref": null,
+            "rendered": "Only .csv files will be accepted.",
+            "type": [Function],
+          },
+        ],
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "children": "",
+          "gutterBottom": true,
+          "variant": "subheading",
+        },
+        "ref": null,
+        "rendered": "",
+        "type": [Function],
+      },
+    ],
+    "type": Symbol(react.fragment),
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "children": Array [
+          <Dropzone
+            accept="text/csv"
+            disableClick={false}
+            disablePreview={false}
+            disabled={false}
+            maxSize={Infinity}
+            minSize={0}
+            multiple={false}
+            preventDropOnDocument={true}
+          >
+            <WithStyles(Typography)
+              align="center"
+              gutterBottom={true}
+              variant="subheading"
+            >
+              Drop your csv file here or Click to upload
+            </WithStyles(Typography)>
+            <WithStyles(Typography)
+              align="center"
+              gutterBottom={true}
+            >
+              Only .csv files will be accepted.
+            </WithStyles(Typography)>
+          </Dropzone>,
+          <WithStyles(Typography)
+            gutterBottom={true}
+            variant="subheading"
+          >
+            
+          </WithStyles(Typography)>,
+        ],
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "accept": "text/csv",
+            "children": Array [
+              <WithStyles(Typography)
+                align="center"
+                gutterBottom={true}
+                variant="subheading"
+              >
+                Drop your csv file here or Click to upload
+              </WithStyles(Typography)>,
+              <WithStyles(Typography)
+                align="center"
+                gutterBottom={true}
+              >
+                Only .csv files will be accepted.
+              </WithStyles(Typography)>,
+            ],
+            "disableClick": false,
+            "disablePreview": false,
+            "disabled": false,
+            "maxSize": Infinity,
+            "minSize": 0,
+            "multiple": false,
+            "onDrop": undefined,
+            "preventDropOnDocument": true,
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "align": "center",
+                "children": "Drop your csv file here or Click to upload",
+                "gutterBottom": true,
+                "variant": "subheading",
+              },
+              "ref": null,
+              "rendered": "Drop your csv file here or Click to upload",
+              "type": [Function],
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "align": "center",
+                "children": "Only .csv files will be accepted.",
+                "gutterBottom": true,
+              },
+              "ref": null,
+              "rendered": "Only .csv files will be accepted.",
+              "type": [Function],
+            },
+          ],
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "children": "",
+            "gutterBottom": true,
+            "variant": "subheading",
+          },
+          "ref": null,
+          "rendered": "",
+          "type": [Function],
+        },
+      ],
+      "type": Symbol(react.fragment),
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+}
+`;

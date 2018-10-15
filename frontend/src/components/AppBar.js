@@ -16,7 +16,7 @@ type Props = {
 function AppBar({ text, classes }: Props) {
   return (
     <div className={classes.root}>
-      <MuiAppBar position="static" color="default">
+      <MuiAppBar position="static">
         <Toolbar>
           <Typography variant="h6" color="inherit">
             { text }
