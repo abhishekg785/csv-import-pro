@@ -60,7 +60,7 @@ The best part is we can simply, pipe the data to it and get the output as shown 
 
 This way things became really easy and we can get the desired output.
 
-OR
+**OR**
 
 The other approach or solution could be to simply get the file, read the file using streams and dump the whole file data into mongodb.
 
@@ -78,6 +78,10 @@ Good solution would be to make the use of **redis** for storing cache, that way 
 
 ## APIS
 I have added swagger to the app, so once the app is running , can go to `http://localhost:3000/api`, which will contain the swagger docs
+
+endpoint `/` : Renders the home page from the frontend dir
+
+---
 
 endpoint `/import` : Uploads the csv file to the server
 
@@ -169,6 +173,7 @@ Response Payload:
 ```
 
 **Example**
+
 Query for the name field
 
 Request Parameters:
@@ -279,7 +284,46 @@ Response
 }
 ```
 
+or
+
+Query for the id field
+
+Request Paramteres
+```
+http://localhost:3000/autocomplete?query=11&field=id&limit=10`
+```
+
+Response
+```
+{
+    "success": true,
+    "result": [
+        {
+            "id": "11",
+            "name": "William Maldonado",
+            "age": "24",
+            "address": "Komiku Parkway, 1409 Ulenu Road",
+            "team": "YELLOW"
+        }
+    ]
+}
+
+```
+
 ## How to run
+### Build the ReactJS Frontend
+Go to the frontend dir
+```
+cd frontend
+```
+
+Build the main `app.js` file
+```
+yarn build or npm run build
+```
+
+
+### Build the backend
 Go to the `backend` directory :
 ```
 cd backend
@@ -297,7 +341,7 @@ yarn run build or npm run build
 yarn run start or npm run start
 ```
 
-This will start the service at port `3000`, to get the access to the service endpoints, i have added swagger to the app, which can be accessed at http://localhost:3000/api.
+This will start the service at port `3000`, to get the access to the service endpoints, i have added **swagger** to the app, which can be accessed at `http://localhost:3000/api`.
 
 **Other commands**
 
@@ -321,7 +365,21 @@ Static Validation or flow check
 yarn flow or npm run flow
 ```
 
-## Tech
+**Docker commands**
+
+To build docker image
+
+```
+yarn run docker:build
+```
+
+To run docker image
+
+```
+yarn run docker:run
+```
+
+## Technologies
 **Node.js** >= 10
 
 **Koa** Web Framework. Koa is really good, supports promise based middleware.
@@ -336,8 +394,14 @@ yarn flow or npm run flow
 
 Jest: Testing
 
-Docker
+**Docker**
 
 ## Improvements
 
-Use Redis for cache implementation
+Use Redis for the cache implementation
+
+## Snapshots
+
+Swagger
+
+![alt text](./snapshots/swagger.png "Swagger snap")
