@@ -1,4 +1,6 @@
-### CSV-IMPORT FRONTEND
+# CSV-IMPORT FRONTEND
+
+### Please give a read :P
 
 The front-end is a **Single Page Application**
 made in **React.JS** and can do :
@@ -88,3 +90,11 @@ This data is cached on the backend for faster access.
 **flow** for static type validation in JS
 
 **jest** and **enzyme** for testing
+
+### Improvementa
+
+Code can be improved more by implementing HOC (High order components)
+
+Do cache handling on the front-end
+
+Use service workers for offline caching
