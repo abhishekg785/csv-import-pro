@@ -12,6 +12,7 @@ import csvStreamify from 'csv-streamify'
 
 import validateSchema from '../validation'
 
+import redis from '../redis'
 import dumbCache from '../utils/dataService'
 
 import {
