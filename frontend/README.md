@@ -2,7 +2,7 @@
 
 ### Please give a read :P
 
-The front-end is a **Single Page Application**
+The front-end is a **Single Page Application** ( it looks shit :p , I just focussed on the functionality for now )
 made in **React.JS** and can do :
 
 Select or dropdown the file to import.
@@ -79,6 +79,8 @@ This data is cached on the backend for faster access.
 
 **React 16**
 
+**Material UI** 
+
 **es6**
 
 **babel** for transpiling
@@ -91,7 +93,7 @@ This data is cached on the backend for faster access.
 
 **jest** and **enzyme** for testing
 
-### Improvementa
+### Todo
 
 Code can be improved more by implementing HOC (High order components)
 
